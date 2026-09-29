@@ -41,6 +41,7 @@
 
   html { scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 16px); }
   *, *::before, *::after { box-sizing: border-box; }
+  html, body { overflow-x: hidden; }
   body {
     margin: 0; background: var(--paper); color: var(--ink);
     font-family: var(--sans); font-size: 16px; line-height: 1.6;
@@ -84,9 +85,11 @@
   .panel.editing { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
   label { display: block; font-size: 13px; font-weight: 500; color: var(--muted); margin-bottom: 6px; }
   input[type="text"], input[type="date"], input[type="url"], textarea {
-    width: 100%; font: inherit; color: var(--ink); background: var(--paper);
+    width: 100%; min-width: 0; max-width: 100%; font: inherit; color: var(--ink); background: var(--paper);
     border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px;
+    -webkit-appearance: none; appearance: none;
   }
+  input[type="date"]::-webkit-date-and-time-value { text-align: left; }
   textarea { resize: vertical; min-height: 100px; line-height: 1.8; font-family: var(--serif); }
   input::placeholder, textarea::placeholder { color: var(--faint); }
   :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
@@ -181,11 +184,9 @@
   </div>
 
   <div class="panel" id="form">
-    <div class="two">
-      <div>
-        <label for="f-date">날짜</label>
-        <input type="date" id="f-date">
-      </div>
+    <div>
+      <label for="f-date">날짜</label>
+      <input type="date" id="f-date">
     </div>
     <div>
       <label for="f-text">오늘의 단상</label>
