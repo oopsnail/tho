@@ -157,6 +157,15 @@
   }
   .e-video .play svg { width: 18px; height: 18px; fill: #fff; margin-left: 2px; }
   .e-video .vt { padding: 8px 10px; font-size: 12px; color: var(--muted); }
+  .e-link {
+    display: flex; align-items: center; gap: 10px; padding: 10px 12px; margin-bottom: 10px;
+    border: 1px solid var(--line); border-radius: 8px; text-decoration: none; color: inherit; background: var(--paper);
+  }
+  .e-link .li { width: 34px; height: 34px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .e-link .li svg { width: 16px; height: 16px; }
+  .e-link .lt { min-width: 0; }
+  .e-link .lt .ltitle { font-size: 13px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .e-link .lt .ldomain { font-size: 12px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .e-text { font-family: var(--serif); font-size: 15px; line-height: 1.85; white-space: pre-wrap; overflow-wrap: anywhere; margin: 0 0 12px; }
   .e-tools { display: flex; gap: 6px; }
 
@@ -209,8 +218,12 @@
       </div>
     </div>
     <div>
-      <label for="f-video">유튜브 링크 (선택)</label>
-      <input type="url" id="f-video" placeholder="https://www.youtube.com/watch?v=...">
+      <label for="f-video">링크 (선택)</label>
+      <input type="url" id="f-video" placeholder="유튜브, 기사, 블로그 등 https://...">
+    </div>
+    <div id="f-link-title-wrap" hidden>
+      <label for="f-link-title">이 링크가 뭔지 한 줄로 (선택)</label>
+      <input type="text" id="f-link-title" placeholder="예: 오늘 읽은 기사">
     </div>
     <div class="error" id="err" role="alert"></div>
     <div class="row">
@@ -279,12 +292,17 @@
     catch (e) { return false; }
   }
 
-  /* ---------- youtube ---------- */
+  /* ---------- links ---------- */
   function parseYoutube(url) {
     if (!url) return null;
     var m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|shorts\/|embed\/))([A-Za-z0-9_-]{6,})/);
     return m ? m[1] : null;
   }
+  function linkDomain(url) {
+    try { return new URL(url).hostname.replace(/^www\./, ""); }
+    catch (e) { return url; }
+  }
+  function linkIcon() { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 14a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1 1"/><path d="M14 10a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1-1"/></svg>'; }
 
   /* ---------- month list ---------- */
   function allMonths() {
@@ -359,9 +377,12 @@
       if (vid) {
         var vi = document.createElement("i"); vi.className = "e-badge video"; vi.innerHTML = videoIcon();
         prev.appendChild(vi);
+      } else if (entry.video) {
+        var li = document.createElement("i"); li.className = "e-badge video"; li.innerHTML = linkIcon();
+        prev.appendChild(li);
       }
       var txt = document.createElement("span");
-      txt.textContent = entry.text || "(글 없음)";
+      txt.textContent = entry.text || (entry.linkTitle && !vid ? entry.linkTitle : "(글 없음)");
       prev.appendChild(txt);
       var chev = document.createElement("span"); chev.className = "e-chev"; chev.setAttribute("aria-hidden", "true");
       head.appendChild(d); head.appendChild(prev); head.appendChild(chev);
@@ -388,6 +409,22 @@
         var vt = document.createElement("div"); vt.className = "vt"; vt.textContent = "유튜브에서 보기";
         a.appendChild(thumb); a.appendChild(play); a.appendChild(vt);
         body.appendChild(a);
+      } else if (entry.video) {
+        var la = document.createElement("a");
+        la.className = "e-link"; la.href = entry.video; la.target = "_blank"; la.rel = "noopener";
+        var licon = document.createElement("span"); licon.className = "li"; licon.innerHTML = linkIcon();
+        var ltext = document.createElement("span"); ltext.className = "lt";
+        var dom = linkDomain(entry.video);
+        if (entry.linkTitle) {
+          var lt1 = document.createElement("div"); lt1.className = "ltitle"; lt1.textContent = entry.linkTitle;
+          var lt2 = document.createElement("div"); lt2.className = "ldomain"; lt2.textContent = dom;
+          ltext.appendChild(lt1); ltext.appendChild(lt2);
+        } else {
+          var lt3 = document.createElement("div"); lt3.className = "ltitle"; lt3.textContent = dom;
+          ltext.appendChild(lt3);
+        }
+        la.appendChild(licon); la.appendChild(ltext);
+        body.appendChild(la);
       }
       if (entry.text) {
         var p = document.createElement("p"); p.className = "e-text"; p.textContent = entry.text;
@@ -434,11 +471,16 @@
   $("f-photo-remove").addEventListener("click", function () {
     setPending(null); $("f-photo-file").value = "";
   });
+  $("f-video").addEventListener("input", function () {
+    var v = $("f-video").value.trim();
+    $("f-link-title-wrap").hidden = !v || !!parseYoutube(v);
+  });
 
   function resetForm() {
     editingId = null;
     $("f-date").value = todayStr();
-    $("f-text").value = ""; $("f-video").value = ""; $("f-photo-file").value = "";
+    $("f-text").value = ""; $("f-video").value = ""; $("f-link-title").value = ""; $("f-photo-file").value = "";
+    $("f-link-title-wrap").hidden = true;
     setPending(null);
     $("form").classList.remove("editing");
     $("save").textContent = "기록 저장";
@@ -450,6 +492,7 @@
     var date = $("f-date").value || todayStr();
     var text = $("f-text").value.trim();
     var video = $("f-video").value.trim();
+    var linkTitle = parseYoutube(video) ? "" : $("f-link-title").value.trim();
     if (!text && !pendingPhoto && !video) {
       $("err").textContent = "글이나 사진, 영상 링크 중 하나는 있어야 해요.";
       $("f-text").focus();
@@ -458,10 +501,10 @@
     $("err").textContent = "";
     if (editingId) {
       entries.forEach(function (e) {
-        if (e.id === editingId) { e.date = date; e.text = text; e.video = video; e.photo = pendingPhoto; }
+        if (e.id === editingId) { e.date = date; e.text = text; e.video = video; e.linkTitle = linkTitle; e.photo = pendingPhoto; }
       });
     } else {
-      entries.push({ id: newId(), date: date, text: text, video: video, photo: pendingPhoto, created: Date.now() });
+      entries.push({ id: newId(), date: date, text: text, video: video, linkTitle: linkTitle, photo: pendingPhoto, created: Date.now() });
     }
     if (!persist()) $("err").textContent = "이 브라우저에서는 저장할 수 없어요. 사진 용량이 크면 지우고 다시 시도해 보세요.";
     currentMonth = monthKey(date);
@@ -476,6 +519,8 @@
     $("f-date").value = e.date;
     $("f-text").value = e.text || "";
     $("f-video").value = e.video || "";
+    $("f-link-title").value = e.linkTitle || "";
+    $("f-link-title-wrap").hidden = !e.video || !!parseYoutube(e.video);
     setPending(e.photo || null);
     $("form").classList.add("editing");
     $("save").textContent = "수정 저장";
@@ -523,6 +568,7 @@
             id: d.id, date: d.date,
             text: typeof d.text === "string" ? d.text : "",
             video: typeof d.video === "string" ? d.video : "",
+            linkTitle: typeof d.linkTitle === "string" ? d.linkTitle : "",
             photo: typeof d.photo === "string" ? d.photo : null,
             created: d.created || Date.now()
           });
