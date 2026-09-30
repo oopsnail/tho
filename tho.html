@@ -39,9 +39,9 @@
     --accent-soft: #3A2B33; --danger: #E2897B; --yt: #E2897B;
   }
 
+  html, body { overflow-x: hidden; }
   html { scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 16px); }
   *, *::before, *::after { box-sizing: border-box; }
-  html, body { overflow-x: hidden; }
   body {
     margin: 0; background: var(--paper); color: var(--ink);
     font-family: var(--sans); font-size: 16px; line-height: 1.6;
@@ -80,7 +80,7 @@
   /* Entry form */
   .panel {
     background: var(--card); border: 1px solid var(--line); border-radius: 10px;
-    padding: 18px; display: grid; gap: 14px; margin-bottom: 8px;
+    padding: 18px; display: grid; gap: 16px; margin-bottom: 8px;
   }
   .panel.editing { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
   label { display: block; font-size: 13px; font-weight: 500; color: var(--muted); margin-bottom: 6px; }
@@ -90,28 +90,14 @@
     -webkit-appearance: none; appearance: none;
   }
   input[type="date"]::-webkit-date-and-time-value { text-align: left; }
-  .date-wrap {
-    border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: var(--paper);
-  }
-  .date-wrap input[type="date"] {
-    border: 0; border-radius: 0; background: transparent; display: block;
-  }
+  .date-wrap { border: 1px solid var(--line); border-radius: 6px; overflow: hidden; background: var(--paper); }
+  .date-wrap input[type="date"] { border: 0; border-radius: 0; background: transparent; display: block; }
   textarea { resize: vertical; min-height: 100px; line-height: 1.8; font-family: var(--serif); }
   input::placeholder, textarea::placeholder { color: var(--faint); }
   :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   input:focus-visible, textarea:focus-visible { outline-offset: 0; border-color: var(--accent); }
-  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
   .error { color: var(--danger); font-size: 13px; min-height: 1em; }
-
-  .photo-pick { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-  .photo-pick input[type="file"] { font-size: 13px; max-width: 100%; }
-  .photo-preview { position: relative; width: 64px; height: 64px; border-radius: 8px; overflow: hidden; border: 1px solid var(--line); flex-shrink: 0; }
-  .photo-preview img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .photo-remove {
-    position: absolute; top: 2px; right: 2px; width: 20px; height: 20px; border-radius: 50%;
-    background: rgba(0,0,0,.6); color: #fff; border: 0; font-size: 13px; line-height: 1; cursor: pointer;
-  }
 
   button {
     font: inherit; font-size: 15px; font-weight: 500; cursor: pointer;
@@ -124,7 +110,34 @@
   button.small { padding: 4px 10px; font-size: 13px; }
   button.danger.armed { background: var(--danger); border-color: var(--danger); color: #fff; }
 
-  /* Entry cards */
+  /* Photo picker (form) */
+  .photo-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+  .photo-slot { position: relative; width: 72px; height: 72px; border-radius: 8px; overflow: hidden; border: 1px solid var(--line); flex-shrink: 0; background: var(--paper); }
+  .photo-slot img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .photo-remove {
+    position: absolute; top: 2px; right: 2px; width: 20px; height: 20px; border-radius: 50%;
+    background: rgba(0,0,0,.6); color: #fff; border: 0; font-size: 13px; line-height: 1; cursor: pointer; padding: 0;
+  }
+  .add-tile {
+    width: 72px; height: 72px; border-radius: 8px; border: 1.5px dashed var(--faint); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; color: var(--muted); background: transparent;
+    font-size: 26px; line-height: 1; padding: 0;
+  }
+  .add-tile:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* Link picker (form) */
+  .link-rows { display: grid; gap: 8px; }
+  .link-row { display: grid; grid-template-columns: 1fr auto; gap: 6px; align-items: start; }
+  .link-row .fields { display: grid; gap: 6px; }
+  .link-row .rm { width: 38px; height: 38px; padding: 0; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .add-link {
+    display: inline-flex; align-items: center; gap: 6px; align-self: start;
+    border-style: dashed; color: var(--muted);
+  }
+  .add-link:hover { border-color: var(--accent); color: var(--accent); }
+  .add-link .plus { font-size: 17px; line-height: 1; }
+
+  /* Entry cards (list) */
   .list { margin-top: 22px; }
   .entry { border: 1px solid var(--line); border-radius: 10px; margin-bottom: 10px; background: var(--card); overflow: hidden; }
   .entry-head {
@@ -134,7 +147,7 @@
   .entry-head:hover { background: var(--accent-soft); }
   .e-date { font-size: 12px; color: var(--muted); width: 46px; flex-shrink: 0; }
   .e-preview { flex: 1; min-width: 0; display: flex; align-items: center; gap: 6px; font-family: var(--serif); font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .e-badge { flex-shrink: 0; width: 15px; height: 15px; }
+  .e-badge { flex-shrink: 0; width: 15px; height: 15px; display: inline-flex; }
   .e-badge.photo { color: var(--muted); }
   .e-badge.video { color: var(--yt); }
   .e-chev { flex-shrink: 0; width: 8px; height: 8px; border-right: 2px solid var(--faint); border-bottom: 2px solid var(--faint); transform: rotate(45deg); transition: transform .15s; }
@@ -142,30 +155,29 @@
 
   .e-body { padding: 0 14px 14px 70px; display: none; }
   .entry.open .e-body { display: block; }
-  .e-photo { width: 100%; max-height: 320px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; display: block; background: var(--paper); }
-  .e-video {
-    display: block; position: relative; border-radius: 8px; overflow: hidden; margin-bottom: 10px;
-    background: var(--paper); border: 1px solid var(--line); text-decoration: none; color: inherit;
+
+  .e-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 6px; margin-bottom: 10px; }
+  .e-photo-btn { border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--paper); padding: 0; height: 110px; cursor: zoom-in; }
+  .e-photo-btn img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+  .e-video, .e-link {
+    display: flex; align-items: center; gap: 10px; padding: 10px 12px; margin-bottom: 8px;
+    border-radius: 8px; text-decoration: none; color: inherit; background: var(--paper);
   }
+  .e-video { display: block; position: relative; border-radius: 8px; overflow: hidden; border: 1px solid var(--line); padding: 0; }
   .e-video img { width: 100%; display: block; aspect-ratio: 16/9; object-fit: cover; background: #000; }
-  .e-video .play {
-    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-  }
-  .e-video .play span {
-    width: 46px; height: 46px; border-radius: 50%; background: rgba(0,0,0,.55);
-    display: flex; align-items: center; justify-content: center;
-  }
+  .e-video .play { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+  .e-video .play span { width: 46px; height: 46px; border-radius: 50%; background: rgba(0,0,0,.55); display: flex; align-items: center; justify-content: center; }
   .e-video .play svg { width: 18px; height: 18px; fill: #fff; margin-left: 2px; }
   .e-video .vt { padding: 8px 10px; font-size: 12px; color: var(--muted); }
-  .e-link {
-    display: flex; align-items: center; gap: 10px; padding: 10px 12px; margin-bottom: 10px;
-    border: 1px solid var(--line); border-radius: 8px; text-decoration: none; color: inherit; background: var(--paper);
-  }
+
+  .e-link { border: 1px solid var(--line); }
   .e-link .li { width: 34px; height: 34px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
   .e-link .li svg { width: 16px; height: 16px; }
   .e-link .lt { min-width: 0; }
   .e-link .lt .ltitle { font-size: 13px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .e-link .lt .ldomain { font-size: 12px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
   .e-text { font-family: var(--serif); font-size: 15px; line-height: 1.85; white-space: pre-wrap; overflow-wrap: anywhere; margin: 0 0 12px; }
   .e-tools { display: flex; gap: 6px; }
 
@@ -177,9 +189,26 @@
   details.backup .inner { margin-top: 12px; display: grid; gap: 10px; }
   details.backup textarea { font-size: 13px; min-height: 120px; font-family: ui-monospace, Menlo, Consolas, monospace; }
 
+  /* Lightbox */
+  .lightbox {
+    position: fixed; inset: 0; z-index: 100; background: rgba(20,16,12,.92);
+    display: flex; align-items: center; justify-content: center;
+    padding: env(safe-area-inset-top, 0px) 16px env(safe-area-inset-bottom, 0px);
+  }
+  .lightbox[hidden] { display: none; }
+  .lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
+  .lb-close, .lb-prev, .lb-next {
+    position: fixed; top: calc(env(safe-area-inset-top, 0px) + 14px); right: 14px;
+    width: 40px; height: 40px; border-radius: 50%; border: 0; background: rgba(0,0,0,.5); color: #fff;
+    display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer;
+  }
+  .lb-prev, .lb-next { top: 50%; transform: translateY(-50%); right: auto; }
+  .lb-prev { left: 14px; }
+  .lb-next { right: 14px; }
+  .lb-count { position: fixed; bottom: calc(env(safe-area-inset-bottom, 0px) + 16px); left: 0; right: 0; text-align: center; color: rgba(255,255,255,.75); font-size: 13px; }
+
   @media (max-width: 480px) {
     h1 { font-size: 23px; }
-    .two { grid-template-columns: 1fr; }
     .e-body { padding-left: 14px; }
   }
 </style>
@@ -208,22 +237,18 @@
       <textarea id="f-text" placeholder="오늘 있었던 일이나 떠오른 생각을 적어 보세요"></textarea>
     </div>
     <div>
-      <label for="f-photo-file">사진 (선택)</label>
-      <div class="photo-pick">
-        <input type="file" id="f-photo-file" accept="image/*">
-        <div class="photo-preview" id="f-photo-preview" hidden>
-          <img id="f-photo-img" alt="">
-          <button type="button" class="photo-remove" id="f-photo-remove" aria-label="사진 삭제">×</button>
-        </div>
+      <label>사진 (선택)</label>
+      <div class="photo-grid" id="photo-grid">
+        <button type="button" class="add-tile" id="add-photo" aria-label="사진 추가">+</button>
       </div>
+      <input type="file" id="photo-file" accept="image/*" multiple hidden>
     </div>
     <div>
-      <label for="f-video">링크 (선택)</label>
-      <input type="url" id="f-video" placeholder="유튜브, 기사, 블로그 등 https://...">
-    </div>
-    <div id="f-link-title-wrap" hidden>
-      <label for="f-link-title">이 링크가 뭔지 한 줄로 (선택)</label>
-      <input type="text" id="f-link-title" placeholder="예: 오늘 읽은 기사">
+      <label>링크 (선택)</label>
+      <div class="link-rows" id="link-rows"></div>
+      <button type="button" class="add-link" id="add-link" style="margin-top:8px">
+        <span class="plus">+</span> 링크 추가
+      </button>
     </div>
     <div class="error" id="err" role="alert"></div>
     <div class="row">
@@ -255,6 +280,14 @@
   </div>
 </div>
 
+<div class="lightbox" id="lightbox" hidden>
+  <button class="lb-close" id="lb-close" aria-label="닫기">×</button>
+  <button class="lb-prev" id="lb-prev" aria-label="이전 사진" hidden>‹</button>
+  <img id="lb-img" alt="">
+  <button class="lb-next" id="lb-next" aria-label="다음 사진" hidden>›</button>
+  <div class="lb-count" id="lb-count"></div>
+</div>
+
 <script>
 (function () {
   var KEY = "my-journal-v1";
@@ -262,7 +295,8 @@
   var editingId = null;
   var openIds = {};
   var currentMonth = null; // "YYYY-MM"
-  var pendingPhoto = null; // data URL staged for the form
+  var pendingPhotos = [];  // array of data URLs staged for the form
+  var pendingLinks = [];   // array of {url, title}
 
   function $(id) { return document.getElementById(id); }
   function newId() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
@@ -280,11 +314,19 @@
     return parseInt(p[1], 10) + "/" + parseInt(p[2], 10);
   }
 
+  /* ---------- migration: older single-photo / single-video entries ---------- */
+  function migrate(e) {
+    if (!Array.isArray(e.photos)) e.photos = e.photo ? [e.photo] : [];
+    if (!Array.isArray(e.links)) e.links = e.video ? [{ url: e.video, title: e.linkTitle || "" }] : [];
+    delete e.photo; delete e.video; delete e.linkTitle;
+    return e;
+  }
+
   /* ---------- storage ---------- */
   function load() {
     try {
       var raw = localStorage.getItem(KEY);
-      if (raw) { var d = JSON.parse(raw); if (Array.isArray(d)) entries = d; }
+      if (raw) { var d = JSON.parse(raw); if (Array.isArray(d)) entries = d.map(migrate); }
     } catch (e) { entries = []; }
   }
   function persist() {
@@ -303,6 +345,8 @@
     catch (e) { return url; }
   }
   function linkIcon() { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 14a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1 1"/><path d="M14 10a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1-1"/></svg>'; }
+  function photoIcon() { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="1.6"/><path d="M21 17l-5.5-5.5-3 3L9 11l-6 6"/></svg>'; }
+  function videoIcon() { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="15" height="14" rx="2"/><path d="M22 9l-5 3 5 3V9z"/></svg>'; }
 
   /* ---------- month list ---------- */
   function allMonths() {
@@ -332,7 +376,6 @@
       b.setAttribute("role", "option");
       if (key === currentMonth) b.setAttribute("aria-current", "true");
       var n = countInMonth(key);
-      b.innerHTML = "";
       var label = document.createElement("span");
       label.textContent = monthLabel(key);
       var mn = document.createElement("span");
@@ -360,44 +403,63 @@
       return;
     }
 
-    shown.forEach(function (entry) {
-      var art = document.createElement("article");
-      art.className = "entry" + (openIds[entry.id] ? " open" : "");
+    shown.forEach(function (entry) { box.appendChild(buildEntryCard(entry)); });
+  }
 
-      var head = document.createElement("button");
-      head.type = "button";
-      head.className = "entry-head";
-      var d = document.createElement("span"); d.className = "e-date"; d.textContent = dayLabel(entry.date);
-      var prev = document.createElement("span"); prev.className = "e-preview";
-      if (entry.photo) {
-        var pi = document.createElement("i"); pi.className = "e-badge photo"; pi.innerHTML = photoIcon();
-        prev.appendChild(pi);
-      }
-      var vid = parseYoutube(entry.video);
-      if (vid) {
-        var vi = document.createElement("i"); vi.className = "e-badge video"; vi.innerHTML = videoIcon();
-        prev.appendChild(vi);
-      } else if (entry.video) {
-        var li = document.createElement("i"); li.className = "e-badge video"; li.innerHTML = linkIcon();
-        prev.appendChild(li);
-      }
-      var txt = document.createElement("span");
-      txt.textContent = entry.text || (entry.linkTitle && !vid ? entry.linkTitle : "(글 없음)");
-      prev.appendChild(txt);
-      var chev = document.createElement("span"); chev.className = "e-chev"; chev.setAttribute("aria-hidden", "true");
-      head.appendChild(d); head.appendChild(prev); head.appendChild(chev);
-      head.addEventListener("click", function () {
-        openIds[entry.id] = !openIds[entry.id];
-        art.classList.toggle("open", openIds[entry.id]);
+  function buildEntryCard(entry) {
+    var art = document.createElement("article");
+    art.className = "entry" + (openIds[entry.id] ? " open" : "");
+
+    var photos = entry.photos || [];
+    var links = entry.links || [];
+    var firstYt = null;
+    for (var i = 0; i < links.length; i++) { var v = parseYoutube(links[i].url); if (v) { firstYt = v; break; } }
+
+    var head = document.createElement("button");
+    head.type = "button";
+    head.className = "entry-head";
+    var d = document.createElement("span"); d.className = "e-date"; d.textContent = dayLabel(entry.date);
+    var prev = document.createElement("span"); prev.className = "e-preview";
+    if (photos.length) {
+      var pi = document.createElement("i"); pi.className = "e-badge photo";
+      pi.innerHTML = photoIcon() + (photos.length > 1 ? '<span style="font-size:10px;margin-left:1px">' + photos.length + '</span>' : "");
+      pi.style.display = "inline-flex"; pi.style.alignItems = "center";
+      prev.appendChild(pi);
+    }
+    if (links.length) {
+      var li = document.createElement("i"); li.className = "e-badge video";
+      li.innerHTML = firstYt ? videoIcon() : linkIcon();
+      prev.appendChild(li);
+    }
+    var txt = document.createElement("span");
+    var firstLinkTitle = links.length && !parseYoutube(links[0].url) && links[0].title ? links[0].title : "";
+    txt.textContent = entry.text || firstLinkTitle || "(글 없음)";
+    prev.appendChild(txt);
+    var chev = document.createElement("span"); chev.className = "e-chev"; chev.setAttribute("aria-hidden", "true");
+    head.appendChild(d); head.appendChild(prev); head.appendChild(chev);
+    head.addEventListener("click", function () {
+      openIds[entry.id] = !openIds[entry.id];
+      art.classList.toggle("open", openIds[entry.id]);
+    });
+
+    var body = document.createElement("div");
+    body.className = "e-body";
+
+    if (photos.length) {
+      var gal = document.createElement("div"); gal.className = "e-gallery";
+      photos.forEach(function (src, idx) {
+        var pbtn = document.createElement("button");
+        pbtn.type = "button"; pbtn.className = "e-photo-btn";
+        var img = document.createElement("img"); img.src = src; img.alt = "";
+        pbtn.appendChild(img);
+        pbtn.addEventListener("click", function () { openLightbox(photos, idx); });
+        gal.appendChild(pbtn);
       });
+      body.appendChild(gal);
+    }
 
-      var body = document.createElement("div");
-      body.className = "e-body";
-      if (entry.photo) {
-        var img = document.createElement("img");
-        img.className = "e-photo"; img.src = entry.photo; img.alt = "";
-        body.appendChild(img);
-      }
+    links.forEach(function (link) {
+      var vid = parseYoutube(link.url);
       if (vid) {
         var a = document.createElement("a");
         a.className = "e-video"; a.href = "https://www.youtube.com/watch?v=" + vid;
@@ -409,14 +471,14 @@
         var vt = document.createElement("div"); vt.className = "vt"; vt.textContent = "유튜브에서 보기";
         a.appendChild(thumb); a.appendChild(play); a.appendChild(vt);
         body.appendChild(a);
-      } else if (entry.video) {
+      } else {
         var la = document.createElement("a");
-        la.className = "e-link"; la.href = entry.video; la.target = "_blank"; la.rel = "noopener";
+        la.className = "e-link"; la.href = link.url; la.target = "_blank"; la.rel = "noopener";
         var licon = document.createElement("span"); licon.className = "li"; licon.innerHTML = linkIcon();
         var ltext = document.createElement("span"); ltext.className = "lt";
-        var dom = linkDomain(entry.video);
-        if (entry.linkTitle) {
-          var lt1 = document.createElement("div"); lt1.className = "ltitle"; lt1.textContent = entry.linkTitle;
+        var dom = linkDomain(link.url);
+        if (link.title) {
+          var lt1 = document.createElement("div"); lt1.className = "ltitle"; lt1.textContent = link.title;
           var lt2 = document.createElement("div"); lt2.className = "ldomain"; lt2.textContent = dom;
           ltext.appendChild(lt1); ltext.appendChild(lt2);
         } else {
@@ -426,62 +488,143 @@
         la.appendChild(licon); la.appendChild(ltext);
         body.appendChild(la);
       }
-      if (entry.text) {
-        var p = document.createElement("p"); p.className = "e-text"; p.textContent = entry.text;
-        body.appendChild(p);
-      }
-      var tools = document.createElement("div"); tools.className = "e-tools";
-      var edit = document.createElement("button"); edit.className = "small"; edit.textContent = "수정";
-      edit.addEventListener("click", function () { startEdit(entry.id); });
-      var del = document.createElement("button"); del.className = "small danger"; del.textContent = "삭제";
-      del.addEventListener("click", function () {
-        if (del.classList.contains("armed")) {
-          entries = entries.filter(function (x) { return x.id !== entry.id; });
-          if (editingId === entry.id) resetForm();
-          persist(); render();
-        } else {
-          del.classList.add("armed"); del.textContent = "정말 삭제";
-          setTimeout(function () { del.classList.remove("armed"); del.textContent = "삭제"; }, 3000);
-        }
-      });
-      tools.appendChild(edit); tools.appendChild(del);
-      body.appendChild(tools);
+    });
 
-      art.appendChild(head); art.appendChild(body);
-      box.appendChild(art);
+    if (entry.text) {
+      var p = document.createElement("p"); p.className = "e-text"; p.textContent = entry.text;
+      body.appendChild(p);
+    }
+
+    var tools = document.createElement("div"); tools.className = "e-tools";
+    var edit = document.createElement("button"); edit.className = "small"; edit.textContent = "수정";
+    edit.addEventListener("click", function () { startEdit(entry.id); });
+    var del = document.createElement("button"); del.className = "small danger"; del.textContent = "삭제";
+    del.addEventListener("click", function () {
+      if (del.classList.contains("armed")) {
+        entries = entries.filter(function (x) { return x.id !== entry.id; });
+        if (editingId === entry.id) resetForm();
+        persist(); render();
+      } else {
+        del.classList.add("armed"); del.textContent = "정말 삭제";
+        setTimeout(function () { del.classList.remove("armed"); del.textContent = "삭제"; }, 3000);
+      }
+    });
+    tools.appendChild(edit); tools.appendChild(del);
+    body.appendChild(tools);
+
+    art.appendChild(head); art.appendChild(body);
+    return art;
+  }
+
+  /* ---------- lightbox ---------- */
+  var lbPhotos = [], lbIndex = 0;
+  function openLightbox(photos, idx) {
+    lbPhotos = photos; lbIndex = idx;
+    renderLightbox();
+    $("lightbox").hidden = false;
+  }
+  function renderLightbox() {
+    $("lb-img").src = lbPhotos[lbIndex];
+    var multi = lbPhotos.length > 1;
+    $("lb-prev").hidden = !multi; $("lb-next").hidden = !multi;
+    $("lb-count").textContent = multi ? (lbIndex + 1) + " / " + lbPhotos.length : "";
+  }
+  function closeLightbox() { $("lightbox").hidden = true; }
+  $("lb-close").addEventListener("click", closeLightbox);
+  $("lightbox").addEventListener("click", function (ev) { if (ev.target === $("lightbox")) closeLightbox(); });
+  $("lb-prev").addEventListener("click", function () { lbIndex = (lbIndex - 1 + lbPhotos.length) % lbPhotos.length; renderLightbox(); });
+  $("lb-next").addEventListener("click", function () { lbIndex = (lbIndex + 1) % lbPhotos.length; renderLightbox(); });
+  document.addEventListener("keydown", function (ev) {
+    if ($("lightbox").hidden) return;
+    if (ev.key === "Escape") closeLightbox();
+    else if (ev.key === "ArrowLeft" && lbPhotos.length > 1) { lbIndex = (lbIndex - 1 + lbPhotos.length) % lbPhotos.length; renderLightbox(); }
+    else if (ev.key === "ArrowRight" && lbPhotos.length > 1) { lbIndex = (lbIndex + 1) % lbPhotos.length; renderLightbox(); }
+  });
+
+  /* ---------- form: photos ---------- */
+  function renderPhotoGrid() {
+    var grid = $("photo-grid");
+    grid.textContent = "";
+    pendingPhotos.forEach(function (src, idx) {
+      var slot = document.createElement("div"); slot.className = "photo-slot";
+      var img = document.createElement("img"); img.src = src; img.alt = "";
+      var rm = document.createElement("button"); rm.type = "button"; rm.className = "photo-remove";
+      rm.textContent = "×"; rm.setAttribute("aria-label", "사진 삭제");
+      rm.addEventListener("click", function () { pendingPhotos.splice(idx, 1); renderPhotoGrid(); });
+      slot.appendChild(img); slot.appendChild(rm);
+      grid.appendChild(slot);
+    });
+    var add = document.createElement("button");
+    add.type = "button"; add.className = "add-tile"; add.id = "add-photo"; add.textContent = "+";
+    add.setAttribute("aria-label", "사진 추가");
+    add.addEventListener("click", function () { $("photo-file").click(); });
+    grid.appendChild(add);
+  }
+  $("photo-file").addEventListener("change", function (ev) {
+    var files = Array.prototype.slice.call(ev.target.files || []);
+    var remaining = files.length;
+    if (!remaining) return;
+    files.forEach(function (file) {
+      var reader = new FileReader();
+      reader.onload = function () {
+        pendingPhotos.push(reader.result);
+        remaining--;
+        if (remaining === 0) renderPhotoGrid();
+      };
+      reader.readAsDataURL(file);
+    });
+    ev.target.value = "";
+  });
+  document.addEventListener("click", function (ev) {
+    if (ev.target && ev.target.id === "add-photo") $("photo-file").click();
+  });
+
+  /* ---------- form: links ---------- */
+  function renderLinkRows() {
+    var box = $("link-rows");
+    box.textContent = "";
+    pendingLinks.forEach(function (link, idx) {
+      var row = document.createElement("div"); row.className = "link-row";
+      var fields = document.createElement("div"); fields.className = "fields";
+
+      var urlInput = document.createElement("input");
+      urlInput.type = "url"; urlInput.placeholder = "유튜브, 기사, 블로그 등 https://...";
+      urlInput.value = link.url;
+      urlInput.addEventListener("input", function () {
+        link.url = urlInput.value.trim();
+        titleInput.hidden = !link.url || !!parseYoutube(link.url);
+      });
+
+      var titleInput = document.createElement("input");
+      titleInput.type = "text"; titleInput.placeholder = "예: 오늘 읽은 기사 (선택)";
+      titleInput.value = link.title || "";
+      titleInput.hidden = !link.url || !!parseYoutube(link.url);
+      titleInput.addEventListener("input", function () { link.title = titleInput.value.trim(); });
+
+      fields.appendChild(urlInput); fields.appendChild(titleInput);
+
+      var rm = document.createElement("button");
+      rm.type = "button"; rm.className = "small rm"; rm.textContent = "×"; rm.setAttribute("aria-label", "링크 삭제");
+      rm.addEventListener("click", function () { pendingLinks.splice(idx, 1); renderLinkRows(); });
+
+      row.appendChild(fields); row.appendChild(rm);
+      box.appendChild(row);
     });
   }
-
-  function photoIcon() { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="11" r="1.6"/><path d="M21 17l-5.5-5.5-3 3L9 11l-6 6"/></svg>'; }
-  function videoIcon() { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="15" height="14" rx="2"/><path d="M22 9l-5 3 5 3V9z"/></svg>'; }
-
-  /* ---------- form ---------- */
-  function setPending(dataUrl) {
-    pendingPhoto = dataUrl;
-    $("f-photo-preview").hidden = !dataUrl;
-    if (dataUrl) $("f-photo-img").src = dataUrl;
-  }
-  $("f-photo-file").addEventListener("change", function (ev) {
-    var file = ev.target.files && ev.target.files[0];
-    if (!file) return;
-    var reader = new FileReader();
-    reader.onload = function () { setPending(reader.result); };
-    reader.readAsDataURL(file);
-  });
-  $("f-photo-remove").addEventListener("click", function () {
-    setPending(null); $("f-photo-file").value = "";
-  });
-  $("f-video").addEventListener("input", function () {
-    var v = $("f-video").value.trim();
-    $("f-link-title-wrap").hidden = !v || !!parseYoutube(v);
+  $("add-link").addEventListener("click", function () {
+    pendingLinks.push({ url: "", title: "" });
+    renderLinkRows();
+    var inputs = $("link-rows").querySelectorAll("input[type=url]");
+    if (inputs.length) inputs[inputs.length - 1].focus();
   });
 
+  /* ---------- form: general ---------- */
   function resetForm() {
     editingId = null;
     $("f-date").value = todayStr();
-    $("f-text").value = ""; $("f-video").value = ""; $("f-link-title").value = ""; $("f-photo-file").value = "";
-    $("f-link-title-wrap").hidden = true;
-    setPending(null);
+    $("f-text").value = "";
+    pendingPhotos = []; pendingLinks = [];
+    renderPhotoGrid(); renderLinkRows();
     $("form").classList.remove("editing");
     $("save").textContent = "기록 저장";
     $("cancel").hidden = true;
@@ -491,20 +634,20 @@
   function save() {
     var date = $("f-date").value || todayStr();
     var text = $("f-text").value.trim();
-    var video = $("f-video").value.trim();
-    var linkTitle = parseYoutube(video) ? "" : $("f-link-title").value.trim();
-    if (!text && !pendingPhoto && !video) {
-      $("err").textContent = "글이나 사진, 영상 링크 중 하나는 있어야 해요.";
+    var links = pendingLinks.filter(function (l) { return l.url; }).map(function (l) { return { url: l.url, title: parseYoutube(l.url) ? "" : (l.title || "") }; });
+    var photos = pendingPhotos.slice();
+    if (!text && !photos.length && !links.length) {
+      $("err").textContent = "글이나 사진, 링크 중 하나는 있어야 해요.";
       $("f-text").focus();
       return;
     }
     $("err").textContent = "";
     if (editingId) {
       entries.forEach(function (e) {
-        if (e.id === editingId) { e.date = date; e.text = text; e.video = video; e.linkTitle = linkTitle; e.photo = pendingPhoto; }
+        if (e.id === editingId) { e.date = date; e.text = text; e.photos = photos; e.links = links; }
       });
     } else {
-      entries.push({ id: newId(), date: date, text: text, video: video, linkTitle: linkTitle, photo: pendingPhoto, created: Date.now() });
+      entries.push({ id: newId(), date: date, text: text, photos: photos, links: links, created: Date.now() });
     }
     if (!persist()) $("err").textContent = "이 브라우저에서는 저장할 수 없어요. 사진 용량이 크면 지우고 다시 시도해 보세요.";
     currentMonth = monthKey(date);
@@ -518,10 +661,9 @@
     editingId = id;
     $("f-date").value = e.date;
     $("f-text").value = e.text || "";
-    $("f-video").value = e.video || "";
-    $("f-link-title").value = e.linkTitle || "";
-    $("f-link-title-wrap").hidden = !e.video || !!parseYoutube(e.video);
-    setPending(e.photo || null);
+    pendingPhotos = (e.photos || []).slice();
+    pendingLinks = (e.links || []).map(function (l) { return { url: l.url, title: l.title || "" }; });
+    renderPhotoGrid(); renderLinkRows();
     $("form").classList.add("editing");
     $("save").textContent = "수정 저장";
     $("cancel").hidden = false;
@@ -564,14 +706,14 @@
       var added = 0;
       data.forEach(function (d) {
         if (d && typeof d.date === "string" && d.id && !have[d.id]) {
-          entries.push({
+          var m = migrate({
             id: d.id, date: d.date,
             text: typeof d.text === "string" ? d.text : "",
-            video: typeof d.video === "string" ? d.video : "",
-            linkTitle: typeof d.linkTitle === "string" ? d.linkTitle : "",
-            photo: typeof d.photo === "string" ? d.photo : null,
+            photos: d.photos, photo: d.photo,
+            links: d.links, video: d.video, linkTitle: d.linkTitle,
             created: d.created || Date.now()
           });
+          entries.push(m);
           added++;
         }
       });
