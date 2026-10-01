@@ -575,10 +575,6 @@
     });
     ev.target.value = "";
   });
-  document.addEventListener("click", function (ev) {
-    if (ev.target && ev.target.id === "add-photo") $("photo-file").click();
-  });
-
   /* ---------- form: links ---------- */
   function renderLinkRows() {
     var box = $("link-rows");
